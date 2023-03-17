@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "mr_bean",
+    "major": "lawyer",
+    "year": "freshmen"
+    }, 
+  {
+    "id": 2,
+    "name": "president_biden",
+    "major": "history",
+    "year": "sophomore"
+  },
+  {
+    "id": 3,
+    "name": "vin_diesel",
+    "major": "computer_science",
+    "year": "sophomore"
+  },
+  {
+    "id": 4,
+    "name": "floki", 
+    "major": "history",
+    "year": "junior"
+  },
+  {
+    "id": 5,
+    "name": "president_trump", 
+    "major": "physics",
+    "year": "junior"
+  },
+  {
+    "id": 6,
+    "name": "morgan_freeman",
+    "major": "math",
+    "year": "senior"
+  },
+  {
+    "id": 7,
+    "name": "president_obama",
+    "major": "electrical_engineering",
+    "year": "senior"
+  },
+  {
+    "id": 8,
+    "name": "johnny_dep",
+    "major": "computer_science",
+    "year": "senior"
+  }
+]
