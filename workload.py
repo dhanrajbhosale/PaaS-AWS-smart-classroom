@@ -1,8 +1,9 @@
 from boto3 import client as boto3_client
 import os
+from configurations import my_constants
 
-input_bucket = "paasawssmartclassroomstack-inputbucket08d572f4-14omuo9vp7mj4"
-output_bucket = "paasawssmartclassroomstack-outputbucket0b6601c4-1se3pnmp0jzqm"
+input_bucket = my_constants.INPUT_BUCKET_NAME
+output_bucket = my_constants.OUTPUT_BUCKET_NAME
 test_cases = "test_cases/"
 
 
