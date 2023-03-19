@@ -28,4 +28,4 @@ class PaaSAwsSmartClassroomStack(Stack):
 
         docker_lambda.add_event_source(S3EventSource(input_bucket, events=[s3.EventType.OBJECT_CREATED]))
         table = dynamodb.Table(self, my_constants.DYNAMODB_TABLE_NAME,
-                               partition_key=dynamodb.Attribute(name="id", type=dynamodb.AttributeType.NUMBER))
+                               partition_key=dynamodb.Attribute(name="name", type=dynamodb.AttributeType.STRING))
