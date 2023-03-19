@@ -1,0 +1,4 @@
+boto3
+dlib
+face_recognition
+ffmpeg

@@ -5,12 +5,11 @@ import boto3
 import face_recognition
 import pickle
 import os
-from aws_cdk import aws_sns
 from boto3.dynamodb.conditions import Key
 
-input_bucket = "smart-classroom-input"
-output_bucket = "smart-classroom-output"
-dynamo_db_table = 'student_data'
+input_bucket = "dhanraj-smart-classroom-input-bucket"
+output_bucket = "dhanraj-smart-classroom-output-bucket"
+dynamo_db_table = "student_data_table"
 
 access_key = ''
 secret_key = ''
@@ -91,13 +90,19 @@ def upload_details_to_s3(details, object_name):
 
 
 def face_recognition_handler(event, context):
-    object_name = event['Records'][0]['s3']['object']['key']
-    bucket_name = event['Records'][0]['s3']['bucket']['name']
+    print("IN DOCKER LAMBDAAAAA")
+    # object_name = event['Records'][0]['s3']['object']['key']
+    # bucket_name = event['Records'][0]['s3']['bucket']['name']
+    #
+    # logging.info(object_name, bucket_name)
+    #
+    # paths = download_from_s3(bucket_name, object_name)
+    # generate_frames(paths[0], paths[1])
+    # person = detect_face(paths[1])
+    # details = get_person_details(person)
+    # upload_details_to_s3(details, object_name)
 
-    logging.info(object_name, bucket_name)
 
-    paths = download_from_s3(bucket_name, object_name)
-    generate_frames(paths[0], paths[1])
-    person = detect_face(paths[1])
-    details = get_person_details(person)
-    upload_details_to_s3(details, object_name)
+def handler(event, context):
+    face_recognition_handler(event, context)
+
