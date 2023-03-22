@@ -1,6 +1,8 @@
 
 # Welcome to your CDK Python project!
 
+![visualization](https://github.com/dhanrajbhosale/PaaS-AWS-smart-classroom/blob/59e6354fec99b948900e520f2c4f48c83771dbf5/architecture.png?raw=true)
+
 This is a blank project for CDK development with Python.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
