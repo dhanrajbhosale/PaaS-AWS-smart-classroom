@@ -21,6 +21,7 @@ class PaaSAwsSmartClassroomStack(Stack):
         output_bucket = s3.Bucket(self, my_constants.OUTPUT_BUCKET_NAME, bucket_name=my_constants.OUTPUT_BUCKET_NAME)
 
         docker_lambda = lambda_.DockerImageFunction(self, "Docker_lambda_function",
+                                                    function_name=my_constants.LAMBDA_FUNCTION_NAME,
                                                     code=lambda_.DockerImageCode.from_image_asset(
                                                         "./paa_s_aws_smart_classroom/lambdas"),
                                                     timeout=Duration.seconds(30),  # Default is only 3 seconds
@@ -28,4 +29,8 @@ class PaaSAwsSmartClassroomStack(Stack):
 
         docker_lambda.add_event_source(S3EventSource(input_bucket, events=[s3.EventType.OBJECT_CREATED]))
         table = dynamodb.Table(self, my_constants.DYNAMODB_TABLE_NAME,
+                               table_name=my_constants.DYNAMODB_TABLE_NAME,
                                partition_key=dynamodb.Attribute(name="name", type=dynamodb.AttributeType.STRING))
+        table.grant_read_data(docker_lambda)
+        input_bucket.grant_read(docker_lambda)
+        output_bucket.grant_write(docker_lambda)

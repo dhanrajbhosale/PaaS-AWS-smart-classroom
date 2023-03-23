@@ -9,16 +9,10 @@ from boto3.dynamodb.conditions import Key
 
 input_bucket = ""
 output_bucket = ""
-dynamo_db_table = ""
+dynamodb_table = ""
 
-access_key = ''
-secret_key = ''
-
-aws_session = boto3.Session(
-    aws_access_key_id=access_key,
-    aws_secret_access_key=secret_key,
-    region_name="us-east-1"
-)
+dynamodb_resource = boto3.resource('dynamodb')
+s3_resource = boto3.resource('s3')
 
 
 def open_encoding(filename):
@@ -50,8 +44,7 @@ def detect_face(images_location):
 
 
 def get_person_details(person):
-    dynamodb = aws_session.resource('dynamodb')
-    table = dynamodb.Table(dynamo_db_table)
+    table = dynamodb_resource.Table(dynamodb_table)
     response = table.query(
         KeyConditionExpression=Key('name').eq(person),
     )
@@ -62,44 +55,37 @@ def generate_frames(video_path, save_location):
     os.system("ffmpeg -i " + str(video_path) + " -r 1 " + str(save_location) + "/image-%3d.jpeg")
 
 
-def download_from_s3(bucket_name, object_name):
-    s3_client = aws_session.client('s3')
+def download_from_s3(object_name):
     os.chdir('/tmp')
     folder_name = object_name[:-4]
 
     if not os.path.exists(os.path.join(folder_name)):
         os.makedirs(folder_name)
-    s3_client.download_file(bucket_name, object_name, os.path.join(os.getcwd(), folder_name, object_name))
+    s3_resource.Bucket(input_bucket).download_file(object_name, os.path.join(os.getcwd(), folder_name, object_name))
 
     return [os.path.join(os.getcwd(), folder_name, object_name), os.path.join(os.getcwd(), folder_name)]
 
 
 def upload_details_to_s3(details, object_name):
-    s3_client = aws_session.resource('s3')
-
     key_file = object_name.split('.')[0]
-
     data_csv = [details['name'], details['major'], details['year']]
-
     temp_csv = '/tmp/{}.csv'.format(key_file)
 
     with open(temp_csv, 'w', encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerow(data_csv)
-    s3_client.meta.client.upload_file(temp_csv, output_bucket, key_file)
+    s3_resource.meta.client.upload_file(temp_csv, output_bucket, key_file)
 
 
 def face_recognition_handler(event, context):
-    print("IN DOCKER LAMBDAAAAA")
     object_name = event['Records'][0]['s3']['object']['key']
-    bucket_name = event['Records'][0]['s3']['bucket']['name']
 
-    logging.info(object_name, bucket_name)
+    logging.info(object_name)
 
-    paths = download_from_s3(bucket_name, object_name)
+    paths = download_from_s3(object_name)
     generate_frames(paths[0], paths[1])
     person = detect_face(paths[1])
-    print("Detected Person: ",person)
+    print("Detected Person: ", person)
     details = get_person_details(person)
     upload_details_to_s3(details, object_name)
 
