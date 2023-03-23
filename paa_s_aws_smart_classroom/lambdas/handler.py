@@ -7,9 +7,9 @@ import pickle
 import os
 from boto3.dynamodb.conditions import Key
 
-input_bucket = ""
-output_bucket = ""
-dynamodb_table = ""
+input_bucket_name = os.environ['INPUT_BUCKET_NAME']
+output_bucket_name = os.environ['OUTPUT_BUCKET_NAME']
+dynamodb_table_name = os.environ['DYNAMODB_TABLE_NAME']
 
 dynamodb_resource = boto3.resource('dynamodb')
 s3_resource = boto3.resource('s3')
@@ -44,7 +44,7 @@ def detect_face(images_location):
 
 
 def get_person_details(person):
-    table = dynamodb_resource.Table(dynamodb_table)
+    table = dynamodb_resource.Table(dynamodb_table_name)
     response = table.query(
         KeyConditionExpression=Key('name').eq(person),
     )
@@ -61,7 +61,7 @@ def download_from_s3(object_name):
 
     if not os.path.exists(os.path.join(folder_name)):
         os.makedirs(folder_name)
-    s3_resource.Bucket(input_bucket).download_file(object_name, os.path.join(os.getcwd(), folder_name, object_name))
+    s3_resource.Bucket(input_bucket_name).download_file(object_name, os.path.join(os.getcwd(), folder_name, object_name))
 
     return [os.path.join(os.getcwd(), folder_name, object_name), os.path.join(os.getcwd(), folder_name)]
 
@@ -74,7 +74,7 @@ def upload_details_to_s3(details, object_name):
     with open(temp_csv, 'w', encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerow(data_csv)
-    s3_resource.meta.client.upload_file(temp_csv, output_bucket, key_file)
+    s3_resource.meta.client.upload_file(temp_csv, output_bucket_name, key_file)
 
 
 def face_recognition_handler(event, context):

@@ -24,6 +24,11 @@ class PaaSAwsSmartClassroomStack(Stack):
                                                     function_name=my_constants.LAMBDA_FUNCTION_NAME,
                                                     code=lambda_.DockerImageCode.from_image_asset(
                                                         "./paa_s_aws_smart_classroom/lambdas"),
+                                                    environment={
+                                                        "INPUT_BUCKET_NAME": my_constants.INPUT_BUCKET_NAME,
+                                                        "OUTPUT_BUCKET_NAME": my_constants.OUTPUT_BUCKET_NAME,
+                                                        "DYNAMODB_TABLE_NAME": my_constants.DYNAMODB_TABLE_NAME
+                                                    },
                                                     timeout=Duration.seconds(30),  # Default is only 3 seconds
                                                     memory_size=1000)
 
