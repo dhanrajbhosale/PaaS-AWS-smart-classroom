@@ -1,9 +1,16 @@
 
-# Welcome to your CDK Python project!
+
+<br/>
+<div align="center">
+<h1 align="center">AWS Smart Classroom</h1>
+</div>
+Our cloud app will include a smart classroom assistant for educators. This assistant collects videos from the user's classroom, performs face recognition on the collected videos, searches the database for the recognized students, and returns the relevant academic information for each student to the user. 
+
+This app's architecture is depicted in the diagram below:
 
 ![visualization](https://github.com/dhanrajbhosale/PaaS-AWS-smart-classroom/blob/59e6354fec99b948900e520f2c4f48c83771dbf5/architecture.png?raw=true)
-
-This is a blank project for CDK development with Python.
+### Built With
+Our application runs on Amazon Lambda, a flexible cloud resource that can be easily scaled up or down as needed to meet demand. Student record is stored in DynamoDB, while videos and final output CSV files are stored in S3. Docker Container Images are stored in ECR. This architecture allows us to leverage the power and scalability of cloud computing, while also providing robust and reliable storage solutions for our users' data
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
