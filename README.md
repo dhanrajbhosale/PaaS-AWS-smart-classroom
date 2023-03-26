@@ -39,7 +39,12 @@ To get a local copy up and running follow these simple steps.
     * Secret access key
     * AWS Region
     * Output format
-3. Running AWS CDK Project
+
+3. Add your S3 Bucket and DynamoDB table name here at (S3 bucket name should be unique globally) 
+
+   `my_constants.py`: [configurations](https://github.com/dhanrajbhosale/PaaS-AWS-smart-classroom/blob/af49ecf6b780c556c72fcdfb1f58fde12129a86e/configurations/my_constants.py)
+ 
+4. Running AWS CDK Project
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
