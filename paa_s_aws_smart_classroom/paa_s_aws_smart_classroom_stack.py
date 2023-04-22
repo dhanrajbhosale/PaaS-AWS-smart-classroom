@@ -2,7 +2,9 @@ from aws_cdk import (
     Stack,
     aws_dynamodb as dynamodb,
     aws_s3 as s3,
-    aws_lambda as lambda_, Duration
+    aws_lambda as lambda_,
+    Duration,
+    RemovalPolicy
 )
 import boto3
 import json
@@ -36,9 +38,15 @@ class PaaSAwsSmartClassroomStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # The code that defines your stack goes here
+        table = dynamodb.Table(self, my_constants.DYNAMODB_TABLE_NAME,
+                               table_name=my_constants.DYNAMODB_TABLE_NAME,
+                               partition_key=dynamodb.Attribute(name="name", type=dynamodb.AttributeType.STRING),
+                               removal_policy=RemovalPolicy.DESTROY)
 
-        input_bucket = s3.Bucket(self, my_constants.INPUT_BUCKET_NAME, bucket_name=my_constants.INPUT_BUCKET_NAME)
-        output_bucket = s3.Bucket(self, my_constants.OUTPUT_BUCKET_NAME, bucket_name=my_constants.OUTPUT_BUCKET_NAME)
+        input_bucket = s3.Bucket(self, my_constants.INPUT_BUCKET_NAME, bucket_name=my_constants.INPUT_BUCKET_NAME,
+                                 removal_policy=RemovalPolicy.DESTROY)
+        output_bucket = s3.Bucket(self, my_constants.OUTPUT_BUCKET_NAME, bucket_name=my_constants.OUTPUT_BUCKET_NAME,
+                                  removal_policy=RemovalPolicy.DESTROY)
 
         docker_lambda = lambda_.DockerImageFunction(self, "Docker_lambda_function",
                                                     function_name=my_constants.LAMBDA_FUNCTION_NAME,
@@ -53,9 +61,6 @@ class PaaSAwsSmartClassroomStack(Stack):
                                                     memory_size=1000)
 
         docker_lambda.add_event_source(S3EventSource(input_bucket, events=[s3.EventType.OBJECT_CREATED]))
-        table = dynamodb.Table(self, my_constants.DYNAMODB_TABLE_NAME,
-                               table_name=my_constants.DYNAMODB_TABLE_NAME,
-                               partition_key=dynamodb.Attribute(name="name", type=dynamodb.AttributeType.STRING))
         table.grant_read_data(docker_lambda)
         input_bucket.grant_read(docker_lambda)
         output_bucket.grant_write(docker_lambda)
