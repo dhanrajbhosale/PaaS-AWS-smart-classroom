@@ -132,6 +132,6 @@ $ python workload.py
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Users submit videos to your S3 input bucket. When a new video is added to the input bucket, the Lambda function is triggered to process it. When a new video is added to the input bucket, the Lambda function is triggered to process it. The Lambda function then employs the Python face recognition library to recognize faces in the frames. The Lambda function searches DynamoDB for the academic information of the first recognized face.
+Users submit videos to your S3 input bucket. When a new video is added to the input bucket, the Lambda function is triggered to process it. The Lambda function then employs the Python face recognition library to recognize faces in the frames. The Lambda function searches DynamoDB for the academic information of the first recognized face.
 
 Enjoy!
